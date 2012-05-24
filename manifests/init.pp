@@ -28,7 +28,10 @@ class activemq(
   $version       = 'present',
   $ensure        = 'running',
   $webconsole    = true,
-  $server_config = 'UNSET'
+  $server_config = 'UNSET',
+  $manage_user   = true,
+  $manage_home   = true,
+  $manage_init   = true
 ) {
 
   validate_re($ensure, '^running$|^stopped$')
@@ -53,8 +56,11 @@ class activemq(
   }
 
   class { 'activemq::packages':
-    version => $version_real,
-    notify  => Class['activemq::service'],
+    version     => $version_real,
+    manage_user => $manage_user,
+    manage_home => $manage_home,
+    manage_init => $manage_init,
+    notify      => Class['activemq::service'],
   }
 
   class { 'activemq::config':
